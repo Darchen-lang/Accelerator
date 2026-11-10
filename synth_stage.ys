@@ -1,0 +1,19 @@
+# Read only the necessary hierarchical files for the stage
+read_verilog -sv src/rtl/irnet_conv1.sv
+read_verilog -sv src/rtl/irnet_residual_block.sv
+read_verilog -sv src/rtl/irnet_stage.sv
+
+# Set the top-level module to our multi-block stage
+hierarchy -check -top irnet_stage
+
+# Translate high-level constructs into basic hardware logic
+proc; opt
+
+# Map abstract operators into internal gate representations
+techmap; opt
+
+# Print the resource usage statistics (gate count, cells, etc.)
+stat
+
+# Export the synthesized netlist
+write_verilog -noattr build/synth_stage_netlist.v
